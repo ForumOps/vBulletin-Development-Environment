@@ -382,7 +382,7 @@ class VDE_Project {
 /**
  * Thrown when shit hits the fan when gathering project info
  * @package     VDE
- * @author      SirAdrian
+ * @author      AdrianSchneider / ForumOps
  */
 class VDE_Project_Exception extends Exception {
 
