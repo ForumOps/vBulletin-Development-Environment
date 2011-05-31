@@ -24,12 +24,16 @@ and also any associated files with your project.
 
 ### Upload Files
 
-Upload all of the `upload/includes/vde` files to your vBulletin development area. There should
-just be `builder.php`, `project.php` and `runtime.php`.
+Upload all of the files in the `upload` directory to your vBulletin development area. Do not upload the `project`
+directory, that's the actual project used to generate the VDE package.
 
 ### Import Product XML
 
 Next, import the VDE Runtime product XML.  
+
+### File Edits (vBulletin 3.5+)
+
+(Missing instructions for this)
 
 ### File Edits (vBulletin 4)
 
