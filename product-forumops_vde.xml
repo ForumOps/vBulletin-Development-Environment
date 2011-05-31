@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="forumops_vde" active="0">
+	<title>vBulletin Development Environment</title>
+	<description>Loads product data from the filesystem and injects it into memory at run-time. Developed by Adrian Schneider of ForumOps.</description>
+	<version>2.1</version>
+	<url>http://www.forumops.com/</url>
+	<versioncheckurl></versioncheckurl>
+	<dependencies>
+		<dependency type="php" minversion="5.2" maxversion="" />
+		<dependency type="vbulletin" minversion="3.7" maxversion="5.0" />
+	</dependencies>
+	<codes>
+	</codes>
+	<templates>
+	</templates>
+	<plugins>
+		<plugin active="1" executionorder="10">
+			<title>vBulletin Development Environment - init_startup</title>
+			<hookname>init_startup</hookname>
+			<phpcode><![CDATA[require_once(DIR . '/includes/vde/runtime.php');
+require_once(DIR . '/includes/vde/project.php');
+
+global $vdeRuntime;
+$vdeRuntime = new VDE_Runtime($vbulletin);
+$vdeRuntime->loadProjects(DIR . '/projects');
+
+if ($initCode = $vdeRuntime->getInitCode()) {
+    eval($initCode);
+}]]></phpcode>
+		</plugin>
+	</plugins>
+	<options>
+	</options>
+	<cronentries>
+	</cronentries>
+	<phrases>
+	</phrases>
+	<stylevardfns>
+	</stylevardfns>
+</product>
