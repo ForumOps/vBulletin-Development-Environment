@@ -22,20 +22,16 @@ and also any associated files with your project.
 
 ## Installation
 
-### Upload Files
+### 1) Upload Files
 
 Upload all of the files in the `upload` directory to your vBulletin development area. Do not upload the `project`
 directory, that's the actual project used to generate the VDE package.
 
-### Import Product XML
+### 2) Import Product XML
 
 Next, import the VDE Runtime product XML.  
 
-### File Edits (vBulletin 3.5+)
-
-(Missing instructions for this)
-
-### File Edits (vBulletin 4)
+### 3) File Edits (vBulletin 4)
 
 If you are running vBulletin 4, you will need to perform a file edit on your development copy to get started.  
 Edit `includes/class_hook.php`, and find:
