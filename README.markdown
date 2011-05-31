@@ -81,6 +81,7 @@ To add install/uninstall ("up/down") code to your project, create a directory ca
 `up-$version.php` (ex: up-1.0.php and down-1.0.php).  These files are expected to start with PHP tags, and then two two line breaks. 
 
 Example:
+
     <?php
 
     // Your Install Code
