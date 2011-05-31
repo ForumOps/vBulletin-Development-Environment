@@ -37,7 +37,7 @@ Next, import the VDE Runtime product XML.
 
 ### File Edits (vBulletin 4)
 
-If you are running vBulletin, you will need to perform a file edit on your development copy to get started.  
+If you are running vBulletin 4, you will need to perform a file edit on your development copy to get started.  
 Edit `includes/class_hook.php`, and find:
 
     private static $pluginlist = array();
