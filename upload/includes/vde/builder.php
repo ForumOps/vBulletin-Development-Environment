@@ -526,7 +526,7 @@ class VDE_Builder_ChecksumFile {
         foreach ($files AS $file) {
             $path = str_replace(DIR, '', $file);
             $pathinfo = pathinfo($path);
-            $hash = call_user_func($callback, $this->_uploadPath . $file);
+            $hash = call_user_func($callback, $this->_uploadPath . $path);
             #var_dump($hash); exit;
 
             $this->_checksums[$pathinfo['dirname']][$pathinfo['basename']] = $hash;
