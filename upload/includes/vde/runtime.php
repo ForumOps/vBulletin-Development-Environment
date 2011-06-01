@@ -67,6 +67,12 @@ class VDE_Runtime {
      * @var     string
      */
     protected $_initCode;
+    
+    /**
+     * Legacy mode (for 3.5-3.9999)
+     * @var     boolean     FALSE if 4+
+     */
+    protected $_legacy;
      
     /**
      * Gets things rolling
@@ -75,6 +81,7 @@ class VDE_Runtime {
     public function __construct(vB_Registry $registry) {
         $this->_registry = $registry;
         $this->_initCode = '';
+        $this->_legacy   = version_compare(FILE_VERSION, '4.0', '<');
     }
     
     /**
