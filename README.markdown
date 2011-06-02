@@ -31,7 +31,9 @@ directory, that's the actual project used to generate the VDE package.
 
 Next, import the VDE Runtime product XML.  
 
-### 3) File Edits (vBulletin 4)
+### 3) File Edits 
+
+#### vBulletin 4+
 
 If you are running vBulletin 4, you will need to perform a file edit on your development copy to get started.  
 Edit `includes/class_hook.php`, and find:
@@ -43,6 +45,38 @@ Replace the 'private' with 'public', so it should read:
     public static $pluginlist = array();
 
 This allows us to dynamically manipulate the plugins that vBulletin has in memory.
+
+#### vBulletin 3.5+
+
+If you are running vBulletin 3.5+ (but not 4+), you will need to perform a different edit,
+in order to get phrases working properly for the run-time system.
+Edit `includes/functions_misc.php`, `fetch_phrase` function, find:
+
+    if (!isset($phrase_cache["{$fieldname}-{$phrasename}"]))
+    {
+    
+Below it, add
+
+        if (isset($vbphrase[$phrasename])) 
+        {
+            $messagetext = $vbphrase[$phrasename];
+            
+            if ($dobracevars)
+                {
+                    $messagetext = str_replace('%', '%%', $messagetext);
+                    $messagetext = preg_replace('#\{([0-9]+)\}#sU', '%\\1$s', $messagetext);
+                }     
+            if ($doquotes)
+                {
+                    $messagetext = str_replace("\\'", "'", addslashes($messagetext));
+                    if ($special)
+                    {
+                        // these phrases have variables in them. Thus, they could have variables like $vboptions that need to be replaced
+                        $messagetext = replace_template_variables($messagetext, false);
+                    }
+                } 
+            return $messagetext;
+        }
 
 ## Building Products
 
