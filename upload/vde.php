@@ -11,7 +11,6 @@ define('CLI_ARGS', serialize($argv));
 
 chdir(dirname($_SERVER['SCRIPT_NAME']));
 require('./global.php');
-require_once(DIR . '/includes/vde/builder.php');
 require_once(DIR . '/includes/vde/project.php');
 
 $argv = unserialize(CLI_ARGS);
@@ -19,6 +18,7 @@ $argv = unserialize(CLI_ARGS);
 ################################################################################
 // Build Project
 if ($argv[1] == 'build') {
+    require_once(DIR . '/includes/vde/builder.php');
     
     try {
         $builder = new VDE_Builder($vbulletin);
@@ -32,6 +32,18 @@ if ($argv[1] == 'build') {
 } else if ($argv[1] == 'run') {
     
     require "includes/cron/$argv[2]";
+    
+################################################################################
+// Import Existing Product
+} else if ($argv[1] == 'port') {
+    require_once(DIR . '/includes/vde/porter.php');
+    
+    try {
+        $porter = new VDE_Porter($vbulletin);
+        echo $porter->port($argv[2], $argv[3]);
+    } catch (Exception $e) {
+        echo $e->getMessage() . PHP_EOL;   
+    }
     
 ################################################################################
 // No Command Selected
