@@ -78,7 +78,19 @@ Below it, add
             return $messagetext;
         }
 
-## Building Products
+## Importing Products
+
+If you already have a product developed outside of VDE (a currently installed vBulletin product),
+then you can run the `port` command to create it.
+
+    php vde.php port product_id projects/product_id
+    
+This takes the product with the id 'product_id', and will create the project structure
+in 'projects/product_id'.
+
+This is the fastest way to get started with VDE.
+
+## Building Products from Scratch
 
 As noted above, projects must exist in your `projects` directory.  Each project is represented by a subdirectory
 which must only contains a-z, 0-9, - or _ characters.  Each project also must contain a `config.php`.  Here is 
