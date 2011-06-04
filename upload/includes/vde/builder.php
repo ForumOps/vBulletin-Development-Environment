@@ -106,6 +106,8 @@ class VDE_Builder {
         
         $this->_output .= "Created Product XML Successfully at $xmlPath\n";
         
+        $project->files = $this->_expandDirectories($project->files);
+        
         if ($uploadFiles = array_merge($project->files, $this->_files)) {
             $this->_copyFiles($uploadFiles, $project->buildPath . '/upload');
             $this->_processChecksumFile($uploadFiles, $project->buildPath . '/upload');
@@ -398,6 +400,26 @@ class VDE_Builder {
             $fc->copy($file, $dest = "$uploadPath" . str_replace(DIR, '', $file), $uploadPath);
             $this->_output .= "Copied file " . str_replace($uploadPath . '/', '', $dest) . "\n";
         }
+    }
+    
+    /**
+     * Expands any complete directories listed to include all of their files
+     * @param   array       Files array
+     * @return  array       Files array, with directories filled with actual file contents
+     */
+    protected function _expandDirectories($files) {
+        foreach ($files as $index => $file) {
+            if (is_dir($file)) {   
+                unset($files[$index]);
+
+                $directoryIterator = new RecursiveDirectoryIterator($file);
+                foreach (new RecursiveIteratorIterator($directoryIterator) as $found) {
+                    $files[] = $found->__toString();
+                }
+            }
+        }
+        
+        return $files;
     }
     
     protected function _findExistingPhrasegroups() {
