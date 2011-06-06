@@ -49,5 +49,5 @@ if ($argv[1] == 'build') {
 // No Command Selected
 } else {
     
-    die('Invalid command.  Use build or run' . PHP_EOL);
+    die('Invalid command.  Available commands: build [path], run [file], port [prod_id] [output_dir]' . PHP_EOL);
 }
