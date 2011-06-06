@@ -31,7 +31,7 @@ if ($argv[1] == 'build') {
 // Run File
 } else if ($argv[1] == 'run') {
     
-    require "includes/cron/$argv[2]";
+    require $argv[2];
     
 ################################################################################
 // Import Existing Product
@@ -49,5 +49,5 @@ if ($argv[1] == 'build') {
 // No Command Selected
 } else {
     
-    die('Invalid command.  Use build or run' . PHP_EOL);
+    die('Invalid command.  Available commands: build [path], run [file], port [prod_id] [output_dir]' . PHP_EOL);
 }
