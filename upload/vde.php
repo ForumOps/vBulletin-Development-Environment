@@ -31,7 +31,7 @@ if ($argv[1] == 'build') {
 // Run File
 } else if ($argv[1] == 'run') {
     
-    require "includes/cron/$argv[2]";
+    require $argv[2];
     
 ################################################################################
 // Import Existing Product
