@@ -132,7 +132,19 @@ Example:
 
     // Your Install Code
 
-After adding multiple versions, be sure to update your project `$config` array to be the latest version.
+After adding multiple versions, be sure to update your project `$config` array to be the latest version.  
+
+You can manually run install code files, or any files dependent on vBulletin, with the
+`run` command.
+
+    // Run install code
+    php vde.php run projects/xx/updown/up-1.0.php
+    
+    // Run uninstall code
+    php vde.php run projects/xx/updown/down-1.0.php
+    
+    // Run scheduled task
+    php vde.php run includes/cron/some_task.php
 
 ### Plugins
 
