@@ -112,8 +112,12 @@ class VDE_Runtime {
     public function loadProjects($inDirectory, $flags = array()) {
         $projects = array();
         
+        if (!is_dir($inDirectory)) {
+            devdebug("VDE Halted: $inDirectory does not exist");   
+        }
+        
         foreach (scandir($inDirectory) as $directory) {
-            if (preg_match('/^([-_a-z0-9]+)$/i', $directory)) {   
+            if (is_dir("$inDirectory/$directory") and preg_match('/^([-_a-z0-9]+)$/i', $directory)) {   
                 try {
                     $projects[$directory] = new VDE_Project("$inDirectory/$directory");
                 } catch (VDE_Project_Exception $e) {
