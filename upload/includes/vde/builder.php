@@ -414,6 +414,9 @@ class VDE_Builder {
 
                 $directoryIterator = new RecursiveDirectoryIterator($file);
                 foreach (new RecursiveIteratorIterator($directoryIterator) as $found) {
+                    if (strpos($found->__toString(), '.svn') !== false) {
+                        continue;
+                    }
                     $files[] = $found->__toString();
                 }
             }
