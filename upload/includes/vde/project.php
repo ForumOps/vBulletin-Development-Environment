@@ -108,6 +108,7 @@ class VDE_Project {
            }
         }
         
+        uksort($versions, 'version_compare');
         return $versions;
     }
     
