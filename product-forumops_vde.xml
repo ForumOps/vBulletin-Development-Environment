@@ -3,7 +3,7 @@
 <product productid="forumops_vde" active="0">
 	<title>vBulletin Development Environment</title>
 	<description>Loads product data from the filesystem and injects it into memory at run-time. Developed by Adrian Schneider of ForumOps.</description>
-	<version>2.1</version>
+	<version>2.2</version>
 	<url>http://www.forumops.com/</url>
 	<versioncheckurl></versioncheckurl>
 	<dependencies>
