@@ -259,7 +259,7 @@ If your product (or website) requires you to modify stock vBulletin templates, o
 
 First, you need to export all of the existing templates into the filesystem.  To do this, you use the `export_templates.php` script:
 
-    php vde.php export_templates
+    php vde.php script export_templates.php
     
 It will prompt you for an output location.  I'd suggest using something like "templates" (in the vBulletin directory).  Note, the directory should exist first.
 
