@@ -232,3 +232,5 @@ Note, custom tasks will NOT automatically run while in VDE.  However, they will 
 Be sure to also add your filename to your project's `$config['files']` array so it gets exported properly!
 
 Note: option and task phrases are automatically generated with VDE.
+
+## Modifying Existing Templates

@@ -80,6 +80,14 @@ class VDE_Project {
     }
     
     /**
+     * Returns the project directory
+     * @return	string		Project directory location
+     */
+    public function getPath() {
+        return $this->_path;
+    }
+    
+    /**
      * Returns the dependencies
      * @return  array       Dependencies defined in config.php - 'dependencies'
      */

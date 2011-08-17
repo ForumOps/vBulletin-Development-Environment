@@ -73,6 +73,12 @@ class VDE_Runtime {
      * @var     boolean     FALSE if 4+
      */
     protected $_legacy;
+    
+    /**
+     * Runtime Style Importer
+     * @var		VDE_Runtime_Style
+     */
+    protected $_runtimeStyle;
      
     /**
      * Gets things rolling
@@ -82,6 +88,9 @@ class VDE_Runtime {
         $this->_registry = $registry;
         $this->_initCode = '';
         $this->_legacy   = version_compare(FILE_VERSION, '4.0', '<');
+        
+        require_once(DIR . '/includes/vde/runtime_style.php');
+        $this->_runtimeStyle = new VDE_Runtime_Style($this->_registry);
     }
     
     /**
@@ -189,6 +198,7 @@ class VDE_Runtime {
     
     /**
      * Handles importing of templates into memory for a given project.
+     * Also imports templates into the style manager / memory for customizations.
      * @param   VDE_Project
      */
     protected function _handleTemplates($project) {
@@ -196,6 +206,10 @@ class VDE_Runtime {
         
         foreach ($project->getTemplates() as $template => $content) {
             $this->_registry->templatecache[$template] = compile_template($content);
+        }
+        
+        if (is_dir($project->getPath() . '/templates/customized')) {
+            $this->_runtimeStyle->loadTemplates($project);
         }
     }
     
