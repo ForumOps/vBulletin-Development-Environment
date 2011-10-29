@@ -190,7 +190,7 @@ class VDE_Runtime_Style {
                     array_slice($data[$group], 0, $this->_config['batch'])
                 );
                 
-                $data[$group] = array_slice($data, $this->_config['batch']);
+                $data[$group] = array_slice($data[$group], $this->_config['batch']);
             } while (!empty($data[$group]));
         }
         
