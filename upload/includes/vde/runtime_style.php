@@ -178,7 +178,7 @@ class VDE_Runtime_Style {
             
             // load into memory if new, or if present on active style
             if (!isset($this->_existingTemplates[$title]) or 
-                in_array($this->_existingTemplates[$title]['templateid'], $this->_loadedTemplates)) {
+                in_array($this->_existingTemplates[$title], $this->_loadedTemplates)) {
 
                 $this->_registry->templatecache[$title] = $compiled;
             }
