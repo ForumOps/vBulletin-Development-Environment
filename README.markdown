@@ -1,6 +1,4 @@
-
-vBulletin Development Environment
-=================================
+# vBulletin Development Environment
 
 vBulletin Development Environment (VDE) is a tool that allows you to build vBulletin products
 entirely from the filesystem.  By using the filesystem, it allows you to follow best practises
@@ -83,10 +81,14 @@ Below it, add
 If you already have a product developed outside of VDE (a currently installed vBulletin product),
 then you can run the `port` command to create it.
 
-    php vde.php port product_id projects/product_id
+    php vde.php port
+    
+This will prompt you for your product_id and your output directory.  You may also pass them:
+
+    php vde.php port product_id output_dir    
     
 This takes the product with the id 'product_id', and will create the project structure
-in 'projects/product_id'.
+in 'output_dir'.
 
 This is the fastest way to get started with VDE.
 
@@ -120,6 +122,8 @@ an example configuration file.
     );
 
 All of the above options should be fairly self explanitory, as they are a near match of what you'd edit in the AdminCP.
+
+If you do not want to specify every single file, you can simply specify directories, and VDE will automatically export all of the files from that directory.  Note: .svn directories are ignored.
 
 ### Install Code
 
@@ -232,3 +236,87 @@ Note, custom tasks will NOT automatically run while in VDE.  However, they will 
 Be sure to also add your filename to your project's `$config['files']` array so it gets exported properly!
 
 Note: option and task phrases are automatically generated with VDE.
+
+## Executing Built in Scripts
+
+I've equipped VDE with a few scripts which I've found to be very useful for building vBulletin-powered websites.
+
+In order to execute a script, you run the `script` command.  If you enter "help" as the script, it will spit out a list of available scripts.
+
+Example
+
+    php vde.php script script_name
+    
+Each script will prompt you with its own options.  Most will also accept the commands as arguments as well:
+
+    php vde.php script script_name arg1 arg2 arg3
+
+This is a lot faster if you are running them often.
+
+## Modifying Existing Templates
+
+If your product (or website) requires you to modify stock vBulletin templates, or those of another product, then we've merged in an old product of ours called ATC ("Automatic Template Compiler") into VDE.
+
+First, you need to export all of the existing templates into the filesystem.  To do this, you use the `export_templates.php` script:
+
+    php vde.php script export_templates.php
+    
+It will prompt you for an output location.  I'd suggest using something like "templates" (in the vBulletin directory).  Note, the directory should exist first.
+
+Once you have your templates there, you will want to customize them.  We used to have it scan that entire directory for changes, but we found that to be inefficient, and also confusing to the developer, since it's harder to tell which ones are customized.
+
+If you have a project at `./projects/test`, you would create a new directory under its templates directory called `customized`.  If you copy a stock template (from `./templates`) to this directory, any changes will automatically get saved to the database.
+
+### Installation
+
+Note, there is a tiny file edit you'll need to make to make this functionality work:
+
+vBulletin 3:
+
+Edit `includes/config.php`, and add:
+    
+    $GLOBALS['specialtemplates'][] = 'template_checksums';
+    
+vBulletin 4:
+
+Edit `global.php`, and find:
+
+    $bootstrap = new vB_Bootstrap_Forum();
+    
+*Above* it, add:
+    
+    $specialtemplates[] = 'template_checksums';
+
+
+VDE keeps a checksum (hash) of all of your customized templates.  When they do not match what's in the database, they get updated again, and the checksums get updated.  This edit brings those checksums into memory for comparison.
+
+### Configuration
+
+There are a few optional configuration options you can make, at a global level, to modify how this behaves.
+
+    // This controls which style to work on 
+    // OPTIONAL, defaults to active style ID
+    $config['VDE']['styleid']
+    
+    // This controls which version to save your templates as
+    // OPTIONAL, defaults to vBulletin's version #
+    $config['VDE']['version']
+
+    // This controls which product to save templates as
+    // OPTIONAL, defaults to 'vbulletin'
+    $config['VDE']['product']
+
+    // This controls how many templates get saved per batch
+    // OPTIONAL, defaults to 5
+    $config['VDE']['batch'] 
+    
+Simply add any of these to your config.php file to customize values.  Some of these may
+need to be moved per-project.  Please raise an issue here if you need this functionality.
+    
+### Exporting Templates
+
+When you are ready to export and package your style, you can simply export it normally.  It's advised
+that you export the customized templates only, rather than including the parents.
+  
+Currently we only support customizing actual templates, but in the future we will look at doing style variables, etc.  
+    

@@ -6,7 +6,7 @@ return array(
     'title'        => 'vBulletin Development Environment',
     'description'  => 'Loads product data from the filesystem and injects it into memory at run-time. Developed by Adrian Schneider of ForumOps.',
     'url'          => 'http://www.forumops.com/',
-    'version'      => '2.1',
+    'version'      => '2.2',
     'author'       => 'ForumOps',
     'active'       => 0,
     'dependencies' => array(
