@@ -49,7 +49,7 @@ class VDE_Runtime_Style {
         $this->_config = array(
             'batch' => isset($vbulletin->config['VDE']['template_batch']) 
                 ? $vbulletin->config['VDE']['template_batch']
-                : 5,
+                : 200,
             'styleid' => isset($vbulletin->config['VDE']['styleid'])
                 ? $vbulletin->config['VDE']['styleid']
                 : STYLEID,
@@ -89,6 +89,10 @@ class VDE_Runtime_Style {
         if ($this->_config['styleid'] == 'STYLEID') {
             $this->_config['styleid'] = STYLEID;
         }
+        if ($project->style_modify) {
+            $this->_config['styleid'] = $project->style_modify;
+            $this->_revertStyle($this->_config['styleid']);
+        }
         
         $this->_saveTemplates     = array();
         $this->_existingTemplates = array();
@@ -106,6 +110,15 @@ class VDE_Runtime_Style {
         if (!empty($this->_saveTemplates)) {
             $this->_saveTemplates();
         }
+    }
+    
+    /**
+     * Reverts all templates/customizations in a given style.
+     * This is needed when switching between two styles.
+     * @param    integer        Style ID
+     */
+    protected function _revertStyle($styleId) {
+        
     }
     
     /**
@@ -179,7 +192,6 @@ class VDE_Runtime_Style {
             // load into memory if new, or if present on active style
             if (!isset($this->_existingTemplates[$title]) or 
                 in_array($this->_existingTemplates[$title], $this->_loadedTemplates)) {
-
                 $this->_registry->templatecache[$title] = $compiled;
             }
         }

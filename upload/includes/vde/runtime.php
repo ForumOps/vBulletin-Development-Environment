@@ -15,7 +15,8 @@ class VDE_Runtime {
     const ENABLE_PLUGINS   =  2;
     const ENABLE_PHRASES   =  4;
     const ENABLE_OPTIONS   =  8;
-    const ENABLE_ALL       = 15;
+    const ENABLE_STYLE     = 16;
+    const ENABLE_ALL       = 31;
     
     /**
      * Type flag to type identifier lookup
@@ -25,7 +26,8 @@ class VDE_Runtime {
         self::ENABLE_TEMPLATES => 'templates',
         self::ENABLE_PLUGINS   => 'plugins',
         self::ENABLE_PHRASES   => 'phrases',
-        self::ENABLE_OPTIONS   => 'options'
+        self::ENABLE_OPTIONS   => 'options',
+        self::ENABLE_STYLE     => 'style'
     );
     
     /**
@@ -42,9 +44,9 @@ class VDE_Runtime {
      * @var     array
      */
     protected $_delayHooks = array(
-        'style_fetch'  => 'phrases',
-        'global_start' => 'templates',
-        'admin_global' => 'phrases'
+        'style_fetch'     => 'phrases',
+        'parse_templates' => 'templates',
+        'admin_global'    => 'phrases'
     );
     
     /**
@@ -82,12 +84,20 @@ class VDE_Runtime {
      
     /**
      * Gets things rolling
+     * Merges $config['Settings'] into the master config for easy overriding.
+     * 
      * @param   vB_Registry
      */
     public function __construct(vB_Registry $registry) {
         $this->_registry = $registry;
+        $this->_registry->vdeProducts = array();
+        
         $this->_initCode = '';
         $this->_legacy   = version_compare(FILE_VERSION, '4.0', '<');
+        
+        if (!empty($registry->config['Settings'])) {
+            $registry->options = array_merge($registry->options, $registry->config['Settings']);
+        }
         
         require_once(DIR . '/includes/vde/runtime_style.php');
         $this->_runtimeStyle = new VDE_Runtime_Style($this->_registry);
@@ -100,7 +110,8 @@ class VDE_Runtime {
      * @param   integer         self::ENABLE_* flags combination
      */
     public function loadProject(VDE_Project $project, $flags = self::ENABLE_ALL) {        
-        $this->_registry->products[$project->id] = 1;
+        $this->_registry->products[$project->id]    = 1;
+        $this->_registry->vdeProducts[$project->id] = $project;
         
         foreach ($this->_types as $flag => $type) {
             if ($flags & $flag) {
@@ -197,11 +208,35 @@ class VDE_Runtime {
     }
     
     /**
+     * Activates a style when a project requires one.
+     * @param    VDE_Project
+     */
+    protected function _handleStyle($project) {
+        if (!$project->style_activate) {
+            return;
+        }
+        
+        $code = '$style = $vbulletin->db->query_first("
+            SELECT *
+              FROM " . TABLE_PREFIX . "style
+             WHERE styleid = ' . $project->style_activate . '
+        ");';
+        
+        if ($this->_legacy) {
+            $hookObj = vBulletinHook::init();
+            $hookObj->pluginlist['style_fetch'] .= "\n$code\n";
+        } else {
+            vBulletinHook::$plustinlist[$hook] .= "\n$code\n";
+        }
+    }
+    
+    /**
      * Handles importing of templates into memory for a given project.
      * Also imports templates into the style manager / memory for customizations.
      * @param   VDE_Project
      */
     protected function _handleTemplates($project) {
+        global $only;
         require_once(DIR . '/includes/adminfunctions_template.php');
         
         foreach ($project->getTemplates() as $template => $content) {

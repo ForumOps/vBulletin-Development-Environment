@@ -27,6 +27,6 @@ while ($template = $db->fetch_array($result)) {
     fclose($fileHandle);
 }
 
-$this->_registry->db->free_result($result);
+$vbulletin->db->free_result($result);
 
 echo "Templates successfully exported" . PHP_EOL;

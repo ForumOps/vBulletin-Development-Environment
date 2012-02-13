@@ -8,12 +8,19 @@ if ($argv[3]) {
     $filename = ($input = vde_get_input('Path to forum data? (leave blank for default)')) ? $input : $filename;
 }
 
+if ($argv[4]) {
+    $root = $argv[4];
+} else {
+    $root = ($input = vde_get_input('Root forum ID?  Leave blank for default')) ? $input : -1;
+}
+
+
 $defaultForum = array (
     'title' => '',
     'description' => '',
     'link' => '',
     'displayorder' => '1',
-    'parentid' => '-1',
+    'parentid' => $root,
     'daysprune' => '-1',
     'defaultsortfield' => 'lastpost',
     'defaultsortorder' => 'desc',
@@ -86,7 +93,10 @@ foreach (array_map('rtrim', explode("\n", file_get_contents($filename))) as $ind
 	}
 	
 	$forum['forumid'] = $forumdata->save();
-	if ($forum['parentid'] == -1) {
+	
+	echo "Imported forum $forum[title]" . PHP_EOL;
+	
+	if ($forum['parentid'] == $root) {
 	    $last = $forum;
 	}
 }

@@ -44,10 +44,24 @@ class VDE_Project {
     public $files;
     
     /**
+     * The style to activate for this project
+     * @var    integer
+     */
+    public $style_activate;
+    
+    /**
+     * The style to modify when this project is activate
+     * @var    integer
+     */
+    public $style_modify;
+    
+    /**
      * The project base directory
      * @var     string
      */
     protected $_path;
+
+    public $ignore;
     
     /**
      * Instaniates a new project from a given project root directory.
@@ -59,11 +73,20 @@ class VDE_Project {
         }
     
         $this->_path = $path;
+        
         $config      = include "$path/config.php";
         
+        global $vbulletin;
+        if (is_callable($callback = $vbulletin->config['VDE']['projects'][$config['id']])) {
+            $callback($config);
+        }
+
         $this->id       = $config['id'];
-        $this->active   = isset($config['active']) ? $config['active'] : 1;
+        $this->active   = (bool)$config['active'];
         $this->encoding = $config['encoding'] ? $config['encoding'] : 'ISO-8859-1';
+        
+        $this->style_activate = (int)$config['style_activate'];
+        $this->style_modify   = (int)$config['style_modify'];
         
         $this->meta = array(
             'title'       => $config['title'],
@@ -76,7 +99,19 @@ class VDE_Project {
         
         $this->buildPath     = $config['buildPath'];        
         $this->files         = $config['files'];
+        $this->ignore        = isset($config['ignoredFiles']) ? $config['ignoredFiles'] : array();
         $this->_dependencies = $config['dependencies'];
+        
+        if (file_exists(DIR . '/includes/xml/bitfield_' . $this->id . '.xml')) {
+            $this->files[] = DIR . '/includes/xml/bitfield_' . $this->id . '.xml';
+        }
+        if (file_exists(DIR . '/includes/xml/cpnav_' . $this->id . '.xml')) {
+            $this->files[] = DIR . '/includes/xml/cpnav_' . $this->id . '.xml';
+        }
+        
+        foreach ($this->files as $i => $file) {
+            $this->files[$i] = str_replace('\\', '/', $file);
+        }
     }
     
     /**
@@ -242,6 +277,8 @@ class VDE_Project {
             return array();   
         }
         
+        global $vbulletin;
+        
         foreach (scandir($dir) as $groupDirName) {
             if (file_exists($groupFile = "$dir/$groupDirName/$groupDirName.php")) {
                 
@@ -252,12 +289,13 @@ class VDE_Project {
                     }
                     
                     $option = include($optionFile);
-                    $options[substr($optionFileName, 0, -4)] = isset($option['value']) ? $option['value'] : $option['defaultvalue'];
-                    
+                    $options[$key = substr($optionFileName, 0, -4)] = isset($vbulletin->options[$key])
+                        ? $vbulletin->options[$key]
+                        : ( isset($option['value']) ? $option['value'] : $option['defaultvalue'] );
                 }
             }            
         }
-       
+        
         return $options;   
     }
     

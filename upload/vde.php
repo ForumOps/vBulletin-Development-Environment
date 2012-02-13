@@ -20,11 +20,19 @@ $argv = unserialize(CLI_ARGS);
 // Build Project
 if ($argv[1] == 'build') 
 {
+    require_once(DIR . '/includes/vde/builder.php');
     $projectPath = $argv[2] ? $argv[2] : vde_get_input('Where is your project located?');
     
     try {
+        $project = new VDE_Project($projectPath);
+        if ($argv[3]) {
+            $project->buildPath = $argv[3];
+        } else if (!$project->buildPath) {
+            $project->buildPath = vde_get_input('Build path?');
+        }
+        
         $builder = new VDE_Builder($vbulletin);
-        echo $builder->build(new VDE_Project($projectPath));
+        echo $builder->build($project);
     } catch (Exception $e) {
         echo $e->getMessage() . PHP_EOL;   
     }

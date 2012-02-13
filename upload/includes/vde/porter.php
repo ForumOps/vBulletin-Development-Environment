@@ -29,8 +29,9 @@ class VDE_Porter {
      */
     public function port($productId, $out) {
         if (!is_dir($out)) {
-            throw new Exception("$out does not exist.  Create directory first.");   
+            mkdir($out, 0777, true);
         }
+        
         if (!$product = $this->_getProduct($productId)) {
             throw new Exception("$productId not found in database");   
         }
