@@ -148,6 +148,14 @@ class VDE_Runtime {
             }
         }
         
+        uasort($projects, function($a, $b) {
+            if ($a->meta['order'] == $b->meta['order']) { 
+                return 0;
+            }
+            return $a->meta['order'] < $b->meta['order'] ? -1 : 1;
+        });
+        
+        
         foreach ($projects as $projectDir => $project) {
             if ($project->active) {
                 $this->loadProject($project, isset($flags[$projectDir]) ? $flags[$projectDir] : self::ENABLE_ALL);

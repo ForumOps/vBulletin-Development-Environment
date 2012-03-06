@@ -94,7 +94,8 @@ class VDE_Project {
             'url'         => $config['url'],
             'versionurl'  => $config['versionurl'],
             'version'     => $config['version'],
-            'author'      => $config['author']
+            'author'      => intval($config['author']),
+            'order'       => $config['executionorder']
         );
         
         $this->buildPath     = $config['buildPath'];        
