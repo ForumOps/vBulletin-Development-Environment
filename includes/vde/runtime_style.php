@@ -93,7 +93,7 @@ class VDE_Runtime_Style {
             $this->_config['styleid'] = $project->style_modify;
             $this->_revertStyle($this->_config['styleid']);
         }
-        
+
         $this->_saveTemplates     = array();
         $this->_existingTemplates = array();
         

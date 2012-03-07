@@ -113,6 +113,8 @@ class VDE_Runtime {
         $this->_registry->products[$project->id]    = 1;
         $this->_registry->vdeProducts[$project->id] = $project;
         
+        devdebug('VDE: Loading project ' . $project->meta['title']);
+        
         foreach ($this->_types as $flag => $type) {
             if ($flags & $flag) {
                 if (isset($this->_delays[$type])) {
@@ -154,7 +156,6 @@ class VDE_Runtime {
             }
             return $a->meta['order'] < $b->meta['order'] ? -1 : 1;
         });
-        
         
         foreach ($projects as $projectDir => $project) {
             if ($project->active) {
