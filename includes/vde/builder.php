@@ -5,7 +5,8 @@
  * @package     VDE
  * @author      AdrianSchneider / ForumOps
  */
-class VDE_Builder {
+class VDE_Builder 
+{
     /**
      * vBulletin Registry Object
      * @var     vB_Registry
@@ -48,7 +49,8 @@ class VDE_Builder {
      * Constructor
      * @param   vB_Registry
      */
-    public function __construct(vB_Registry $registry) {
+    public function __construct(vB_Registry $registry) 
+    {
         $this->_registry = $registry;
         require_once(DIR . '/includes/class_xml.php');
     }
@@ -60,7 +62,8 @@ class VDE_Builder {
      *
      * @param   VDE_Project
      */
-    public function build(VDE_Project $project, $outputPath = null) {
+    public function build(VDE_Project $project, $outputPath = null) 
+    {
         if (!is_dir($project->buildPath)) {
             if (!mkdir($project->buildPath, 0644)) {
                 throw new VDE_Builder_Exception('Could not create project directory');
@@ -123,7 +126,8 @@ class VDE_Builder {
      * Adds the dependencies to the product XML file
      * @param   array       Dependencies from config.php
      */
-    protected function _processDependencies($dependencies) {
+    protected function _processDependencies($dependencies) 
+    {
         $this->_xml->add_group('dependencies');
         
         foreach ($dependencies as $type => $versions) {
@@ -143,7 +147,8 @@ class VDE_Builder {
      * Adds the install and uninstall code to the product XML file
      * @param   array       Versions and associated install/uninstall code from files
      */    
-    protected function _processCodes($versions) {
+    protected function _processCodes($versions) 
+    {
         $this->_xml->add_group('codes');
         
         foreach ($versions as $version => $codes) {
@@ -166,7 +171,8 @@ class VDE_Builder {
      *
      * @param   array       Scheduled tasks from filesystem
      */
-    protected function _processTasks($tasks) {
+    protected function _processTasks($tasks) 
+    {
         $this->_xml->add_group('cronentries');    
         
         foreach ($tasks as $task) {        
@@ -206,7 +212,8 @@ class VDE_Builder {
      * Adds the plugins to the product XML file
      * @param   array       Plugins from filesystem
      */
-    protected function _processPlugins($plugins) {
+    protected function _processPlugins($plugins) 
+    {
         $this->_xml->add_group('plugins');
         
         foreach ($plugins as $plugin)
@@ -242,7 +249,8 @@ class VDE_Builder {
      * @param    string        Code before processing
      * @return   string        Code after processing
      */
-    protected function _processBuildComments($code) {
+    protected function _processBuildComments($code) 
+    {
         if (strpos($code, '#if') === false) {
             return $code;
         }
@@ -258,7 +266,8 @@ class VDE_Builder {
      * Adds the templates to the product XML file
      * @param   array       Templates from filesystem
      */
-    protected function _processTemplates($templates) {
+    protected function _processTemplates($templates) 
+    {
         $this->_xml->add_group('templates');
         
         foreach ($templates as $template) {
@@ -284,7 +293,8 @@ class VDE_Builder {
      *
      * @param   array       Options from files
      */
-    protected function _processOptions($optionGroups) {
+    protected function _processOptions($optionGroups) 
+    {
         $existingGroups = $this->_findExistingPhrasegroups();
         
         $this->_xml->add_group('options');
@@ -349,7 +359,8 @@ class VDE_Builder {
      * Add the phrases to the product XML file.
      * @param   array       Phrases from filesystem + tasks/settings
      */
-    protected function _processPhrases($phrasetypes) {
+    protected function _processPhrases($phrasetypes) 
+    {
         $this->_xml->add_group('phrases');
         
         foreach ($this->_phrases as $fieldName => $fieldType) {
@@ -404,7 +415,8 @@ class VDE_Builder {
      * @param   array       Files to copy
      * @param   string      Upload path (build dir / upload)
      */
-    protected function _copyFiles($files, $uploadPath) {
+    protected function _copyFiles($files, $uploadPath) 
+    {
         if (!is_dir($uploadPath)) {
             mkdir($uploadPath, 0644, true);
         }
@@ -428,7 +440,8 @@ class VDE_Builder {
      * @param   array       Files array
      * @return  array       Files array, with directories filled with actual file contents
      */
-    protected function _expandDirectories($files) {
+    protected function _expandDirectories($files) 
+    {
         foreach ($files as $index => $file) {
             if (is_dir($file)) {   
                 unset($files[$index]);
@@ -446,7 +459,8 @@ class VDE_Builder {
         return $files;
     }
     
-    protected function _findExistingPhrasegroups() {
+    protected function _findExistingPhrasegroups() 
+    {
         $groups = array();
         
         $result = $this->_registry->db->query_read("
@@ -599,7 +613,8 @@ class VDE_Builder_Checksums
  * @package     VDE
  * @author      Dismounted
  */
-class VDE_Builder_Style {
+class VDE_Builder_Style 
+{
     
     protected $_registry;
     
@@ -617,6 +632,7 @@ class VDE_Builder_Style {
  * @package     VDE
  * @author      AdrianSchneider / ForumOps
  */
-class VDE_Builder_Exception extends Exception {
+class VDE_Builder_Exception extends Exception 
+{
 
 }
