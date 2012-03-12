@@ -45,8 +45,11 @@ else if ($argv[1] == 'script')
 
     $script = $argv[2] ? $argv[2] : vde_get_input('Which script would you like to run?  Enter help to see a list of available scripts.');
     
-    if ($script == 'help') {
-        echo "Available scripts: " . implode(', ', vde_get_scripts()) . PHP_EOL;
+    if (!$script or $script == 'help') {
+        echo '# Available scripts: ' .PHP_EOL;
+        foreach (vde_get_scripts() as $script) {
+            echo "#     $script" . PHP_EOL;
+        }
         exit;
     }
     
