@@ -65,7 +65,7 @@ class VDE_Builder
     public function build(VDE_Project $project, $outputPath = null) 
     {
         if (!is_dir($project->buildPath)) {
-            if (!mkdir($project->buildPath, 0644)) {
+            if (!mkdir($project->buildPath, 0777)) {
                 throw new VDE_Builder_Exception('Could not create project directory');
             }
         }
@@ -418,7 +418,7 @@ class VDE_Builder
     protected function _copyFiles($files, $uploadPath) 
     {
         if (!is_dir($uploadPath)) {
-            mkdir($uploadPath, 0644, true);
+            mkdir($uploadPath, 0777, true);
         }
         
         $dir = str_replace('\\', '/', DIR);
@@ -427,7 +427,7 @@ class VDE_Builder
             $dest = $uploadPath . str_replace($dir, '', $file);
             
             if (!is_dir($newDir = dirname($dest))) {
-                mkdir($newDir, 0644, true);
+                mkdir($newDir, 0777, true);
             }
             
             copy($file, $uploadPath . str_replace($dir, '', $file));
